@@ -17,7 +17,7 @@ dulieu = []
 
 root = tk.Tk()
 def MaHoa():
-    global index
+    global index,dulieu
     img = cv2.imread(filename)
     px = img[x,y]
     for i in range(3):
@@ -60,7 +60,7 @@ def open_img():
 
 def save_img():
     try:
-        global img_cv,filename,dulieu,w,h,x
+        global img_cv,filename,dulieu,w,h,x,y
         """Save the current file as a new file."""
         filename = asksaveasfilename(
             defaultextension=".png",
@@ -73,7 +73,6 @@ def save_img():
             text = frm_vanban.get(1.0,"end-1c")
             text +='#'
             chuthuong = text.lower()
-            print(chuthuong)
 
             i=0
             while i<len(text):
@@ -83,13 +82,13 @@ def save_img():
             k = int(frm_k.get())
             for i in range(math.ceil(len(chuthuong)/3)):
                 MaHoa() 
-                if x +k < w:
+                if x +k < h:
                     x+=k
                 else:
                     x = 0
-                    y += k
+                    y += 3
         messagebox.showinfo("Complete", "Encode Complete")
-    except:
+    except :
         messagebox.showwarning("Warning", "Kiem tra lai anh va key cua ban")
 
 def giai_ma():
@@ -110,16 +109,16 @@ def giai_ma():
                     break
                 else:
                     dulieu +=[px1[i]]
-            if x1 +k < w:
+            if x1 +k < h:
                 x1+=k
                 px1 = img_new[x1,y1]
             else:
                 x1 = 0
-                y1+=k 
+                y1+= 3
                 px1 = img_new[x1,y1]
 
-        for i in range(len(dulieu)):
-            gm += alphabet[dulieu[i]]
+        for i in dulieu:
+            gm += alphabet[i%length_alphabet]
         frm_vanban.delete(1.0,tk.END)
         frm_vanban.insert(tk.END, gm.title())
         messagebox.showinfo("Complete", "Decryption Complete")
